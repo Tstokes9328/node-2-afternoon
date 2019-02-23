@@ -1,7 +1,10 @@
 module.exports = {
     //Create Product Funciton
     create: (req, res) => {
-        req.app.db.create_product().then(() => {
+        let {name, description, price, image_url} = req.body;
+        console.log(req.app)
+
+        req.app.get('db').create_product([name, description, price, image_url]).then(() => {
             res.status(200).send('Created');
         }).catch(() => {
             res.status(500).send('Failed');
@@ -10,7 +13,9 @@ module.exports = {
 
     //Read Product Function
     getOne: (req, res) => {
-        req.app.db.read_product().then((product) => {
+        let {id} = req.params;
+
+        req.app.get('db').read_product([id]).then((product) => {
             res.status(200).send(product);
         }).catch((error) => {
             res.status(500).send('Could not get product');
@@ -20,7 +25,7 @@ module.exports = {
 
     //Read All Products Function
     getAll: (req, res) => {
-        req.app.db.read_products().then((products) => {
+        req.app.get('db').read_products().then((products) => {
             res.status(200).send(products);
         }).catch((error) => {
             res.status(500).send('Could not get products');
@@ -30,7 +35,10 @@ module.exports = {
 
     //Update Product Function
     update: (req, res) => {
-        req.app.db.update_product().then(() => {
+        let {id} = req.params;
+        let {desc} = req.query;
+
+        req.app.get('db').update_product([desc, id]).then(() => {
             res.status(200).send('Updated');
         }).catch(() => {
             res.status(500).send('Failed');
@@ -39,7 +47,9 @@ module.exports = {
 
     //Delete Product Funciton
     delete: (req, res) => {
-        req.app.db.delete_product().then(() => {
+        let {id} = req.params;
+
+        req.app.get('db').delete_product([id]).then(() => {
             res.status(200).send('Deleted');
         }).catch(() => {
             res.status(500).send('Failed');
